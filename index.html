@@ -434,6 +434,65 @@
   }
   .btn-whatsapp:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(37,211,102,0.45); background: #20ba5a; }
   .gold-line { width: 60px; height: 2px; background: linear-gradient(90deg, var(--gold), transparent); margin-bottom: 32px; }
+  /* === COOKIE BANNER === */
+  .cookie-banner {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 998;
+    background: #0f2419;
+    border-top: 1px solid rgba(201,168,76,0.35);
+    padding: 20px 32px;
+    direction: rtl;
+  }
+  .cookie-banner.visible { display: block; }
+  .cookie-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .cookie-text {
+    font-size: 14px;
+    color: #b0b8c1;
+    line-height: 1.6;
+    flex: 1;
+    min-width: 240px;
+  }
+  .cookie-text a { color: #c9a84c; text-decoration: underline; }
+  .cookie-btns { display: flex; gap: 12px; flex-shrink: 0; }
+  .cookie-accept {
+    background: linear-gradient(135deg, #c9a84c, #e8c97a);
+    color: #0f2419;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 4px;
+    font-family: 'Heebo', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .cookie-accept:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(201,168,76,0.35); }
+  .cookie-decline {
+    background: transparent;
+    color: #8a9099;
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-family: 'Heebo', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .cookie-decline:hover { color: #d8dee4; border-color: rgba(255,255,255,0.2); }
+  .footer-links { margin-top: 10px; }
+  .footer-links a { color: #8a9099; text-decoration: none; font-size: 12px; margin: 0 10px; transition: color 0.2s; }
+  .footer-links a:hover { color: #c9a84c; }
   /* === SUCCESS POPUP === */
   .success-popup {
     display: none;
@@ -729,7 +788,25 @@
 <!-- FOOTER -->
 <footer>
   <p>פנינה קריוף | AI Systems Architect &nbsp;|&nbsp; כל הזכויות שמורות 2026</p>
+  <div class="footer-links">
+    <a href="privacy.html">מדיניות פרטיות</a>
+    <a href="terms.html">תנאי שימוש</a>
+  </div>
 </footer>
+
+<!-- COOKIE BANNER -->
+<div class="cookie-banner" id="cookie-banner">
+  <div class="cookie-inner">
+    <p class="cookie-text">
+      אתר זה משתמש בעוגיות (Cookies) לצורך תפקוד תקין בלבד.
+      לפרטים נוספים ראי את <a href="privacy.html">מדיניות הפרטיות</a> שלנו.
+    </p>
+    <div class="cookie-btns">
+      <button class="cookie-accept" onclick="acceptCookies()">מסכימה</button>
+      <button class="cookie-decline" onclick="declineCookies()">לא תודה</button>
+    </div>
+  </div>
+</div>
 
 <!-- SUCCESS POPUP -->
 <div class="success-popup" id="success-popup">
@@ -755,6 +832,20 @@
     });
     form.reset();
     document.getElementById("success-popup").classList.add("active");
+  }
+
+  function acceptCookies() {
+    localStorage.setItem('cookie_consent', 'accepted');
+    document.getElementById('cookie-banner').classList.remove('visible');
+  }
+  function declineCookies() {
+    localStorage.setItem('cookie_consent', 'declined');
+    document.getElementById('cookie-banner').classList.remove('visible');
+  }
+  if (!localStorage.getItem('cookie_consent')) {
+    setTimeout(function() {
+      document.getElementById('cookie-banner').classList.add('visible');
+    }, 1500);
   }
 
   document.querySelectorAll('a[href^="#"]').forEach(function(a) {
